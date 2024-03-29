@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package com.assignment.grpc; // Adjusted package declaration
+
+option java_multiple_files = true;
+
+// Query 1: Fetch cost data based on criteria
+message QueryOneRequest {
+  int32 year = 1;
+  string state = 2;
+  string type = 3;
+  string length = 4;
+  string expense = 5;
+}
+
+message QueryOneResponse {
+  int32 value = 1;
+}
+
+// Query 2: Determine the top 5 most expensive states
+message QueryTwoRequest {
+  int32 year = 1;
+  string type = 2;
+  string length = 3;
+}
+
+message StateExpense {
+  string state = 1;
+  int32 overallExpense = 2;
+}
+
+message QueryTwoResponse {
+  repeated StateExpense expenses = 1;
+}
+
+// Query 3: Identify the top 5 most economic states
+// Uses QueryGeneralRequest from Query 2
+message QueryThreeRequest {
+  int32 year = 1;
+  string type = 2;
+  string length = 3;
+}
+message QueryThreeResponse {
+  repeated StateExpense expenses = 1;
+}
+
+// Query 4: Calculate the top 5 states with the highest growth rate
+message QueryFourRequest {
+  string type = 1;
+  string length = 2;
+  int32 range = 3; // 1 for one year, 2 for three years, 3 for five years
+}
+
+message QueryFourResult {
+  string state = 1;
+  double growthRate = 2;
+}
+
+message QueryFourResponse {
+  repeated QueryFourResult results = 1;
+}
+
+// Query 5: Aggregate average overall expense by region
+message QueryFiveRequest {
+  int32 year = 1;
+  string type = 2;
+  string length = 3;
+}
+
+message QueryFiveResult {
+  string region = 1;
+  int32 averageExpense = 2;
+}
+
+message QueryFiveResponse {
+  repeated QueryFiveResult results = 1;
+}
+
+// Service definition combining all queries
+service EduCostStatQueryOneService {
+  rpc QueryOne(QueryOneRequest) returns (QueryOneResponse);
+  }
+  service EduCostStatQueryTwoService {
+  rpc QueryTwo(QueryTwoRequest) returns (QueryTwoResponse);
+  }
+  service EduCostStatQueryThreeService {
+  rpc QueryThree(QueryThreeRequest) returns (QueryThreeResponse);
+  }
+  service EduCostStatQueryFourService {
+  rpc QueryFour(QueryFourRequest) returns (QueryFourResponse);
+  }
+  service EduCostStatQueryFiveService {
+  rpc QueryFive(QueryFiveRequest) returns (QueryFiveResponse);
+}
